@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Vérification Gandal</title>
+<style>body{font:16px/1.45 system-ui,sans-serif;margin:0;padding:16px;background:#f5f7f6;color:#1b2430}h2{margin:0 0 12px}.c{background:#fff;border:1px solid #d5dfe3;border-left:4px solid #1d4e6b;border-radius:8px;padding:12px;margin-bottom:12px;overflow-wrap:anywhere}.ok{color:#1e7a46;font-weight:700}.ko{color:#c0392b;font-weight:700}a.b{display:block;text-align:center;background:#1d4e6b;color:#fff;border-radius:8px;padding:12px;margin-top:10px;text-decoration:none;font-weight:700}small{color:#5b6b73}</style></head>
+<body><h2>Vérification de la version</h2>
+<div class="c" id="a">Lecture en cours…</div><div class="c" id="b"></div><div class="c" id="d"></div>
+<small>Page de vérification v1 · Gandal Solutions</small>
+<script>
+async function look(url,opt){try{const r=await fetch(url,opt),t=await r.text(),m=t.match(/Gandal Solutions\s*·\s*(v[0-9][^<"]*)/);return {status:r.status,chars:t.length,tag:m?m[1].trim():null,pay:t.includes('function payView'),modified:r.headers.get('last-modified')}}catch(e){return {error:String(e)}}}
+const show=(r)=>r.error?'<span class="ko">Erreur : '+r.error+'</span>':(r.status!==200?'<span class="ko">Page introuvable (code '+r.status+')</span>':'Étiquette de version : <b>'+(r.tag||'aucune (ancienne version)')+'</b><br>Taille : '+r.chars+' caractères<br>Page de paiement présente : '+(r.pay?'<span class="ok">OUI</span>':'<span class="ko">NON</span>')+'<br>Date du fichier : '+(r.modified||'inconnue'));
+(async()=>{
+ const fresh=await look('index.html?nocache='+Date.now(),{cache:'no-store'}),seen=await look('index.html',{});
+ document.getElementById('a').innerHTML='<b>1. Ce que GitHub publie maintenant</b><br>'+show(fresh);
+ document.getElementById('b').innerHTML='<b>2. Ce que votre téléphone affiche (copie gardée)</b><br>'+show(seen);
+ const d=document.getElementById('d'),open='<a class="b" href="index.html?v='+Date.now()+'">Ouvrir l’application (version fraîche)</a>';
+ if(fresh.error||fresh.status!==200)d.innerHTML='<b>Résultat</b><br><span class="ko">Impossible de lire index.html sur GitHub.</span> Vérifiez que le fichier s’appelle exactement index.html dans le dépôt Gandal-Solutions.';
+ else if(fresh.pay&&seen.pay)d.innerHTML='<b>Résultat</b><br><span class="ok">Tout est bon : la nouvelle version est en ligne.</span>'+open;
+ else if(fresh.pay&&!seen.pay)d.innerHTML='<b>Résultat</b><br><span class="ko">GitHub a la nouvelle version, mais votre téléphone garde une ancienne copie.</span><br>Touchez le bouton ci-dessous : il ouvre la version fraîche. Si l’ancienne revient plus tard : Chrome ⋮ › Paramètres › Confidentialité › Effacer les données de navigation › Images et fichiers en cache.'+open;
+ else d.innerHTML='<b>Résultat</b><br><span class="ko">GitHub publie encore l’ancienne version.</span><br>Le fichier téléversé n’est pas le dernier, ou la publication n’est pas terminée. Vérifiez : (1) github.com/barriem197-dotcom/Gandal-Solutions/actions doit montrer une coche verte ; (2) Settings › Pages : Branch = main, dossier = / (root). Envoyez-moi une capture de cette page.';
+})();
+</script></body></html>

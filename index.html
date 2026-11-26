@@ -43,7 +43,7 @@ header select{width:auto;min-height:0;padding:5px;color:#000}
 .ic{display:block;font-size:1.6rem}
 table{width:100%;border-collapse:collapse}
 td,th{border-bottom:1px solid var(--bd);padding:6px;text-align:start}
-.err{color:var(--rd)}.ntab{width:100%;border-collapse:collapse;font-size:.85rem}.ntab th,.ntab td{border:1px solid var(--mu);padding:4px 6px;text-align:center}.ntab th{background:var(--hi)}.ntab td.nm{text-align:left}.ntab td.n{width:32px}.ntab td.sc{min-width:42px}.nin{text-align:center;font-size:.85rem;margin:0 0 4px}.tn{color:var(--mu);font-weight:400;font-size:.8rem}.ut td:not(:first-child),.ut th:not(:first-child){text-align:center}.pfoot{text-align:center;font-size:.75rem;color:var(--mu);margin-top:14px}.mt td,.mt th{padding:3px}.bhead{display:flex;gap:12px;align-items:center;border-bottom:2px solid var(--ink);padding-bottom:8px;margin-bottom:8px}.bhead img{max-height:72px;max-width:96px}.mt input{min-height:38px;padding:6px}
+.err{color:var(--rd)}#pfg{display:none}.ntab{width:100%;border-collapse:collapse;font-size:.85rem}.ntab th,.ntab td{border:1px solid var(--mu);padding:4px 6px;text-align:center}.ntab th{background:var(--hi)}.ntab td.nm{text-align:left}.ntab td.n{width:32px}.ntab td.sc{min-width:42px}.nin{text-align:center;font-size:.85rem;margin:0 0 4px}.tn{color:var(--mu);font-weight:400;font-size:.8rem}.ut td:not(:first-child),.ut th:not(:first-child){text-align:center}.pfoot{text-align:center;font-size:.75rem;color:var(--mu);margin-top:14px}.mt td,.mt th{padding:3px}.bhead{display:flex;gap:12px;align-items:center;border-bottom:2px solid var(--ink);padding-bottom:8px;margin-bottom:8px}.bhead img{max-height:72px;max-width:96px}.mt input{min-height:38px;padding:6px}
 .bad{border-color:var(--rd)!important;background:#fdd!important;color:#900!important}
 .hidden{display:none!important}
 .acc-btn{display:flex;justify-content:space-between;width:100%;min-height:50px;background:var(--ink);color:#fff;border:0;border-radius:8px;padding:12px 14px;font-weight:700;margin-top:10px;cursor:pointer}
@@ -70,7 +70,7 @@ nav button.active{color:var(--ink2);font-weight:700;border-top-color:var(--ac);b
 #dlg .acts button{padding:8px 16px;border-radius:8px;border:1px solid var(--bd);background:var(--card);cursor:pointer}
 #dlg .acts .btn{width:auto;margin:0;min-height:0;background:var(--ink);color:#fff;border:2px solid var(--ink)}
 @page{margin:0}
-@media print{header,nav,.noprint{display:none!important}body{padding:0!important}main{padding:0!important;max-width:none!important}.card{border:0!important;padding:12mm 14mm 22mm!important;margin:0!important}.pfoot{position:fixed;bottom:7mm;left:0;right:0;margin:0}.tpage{break-after:page;page-break-after:always}.tpage:last-child{break-after:auto;page-break-after:auto}}
+@media print{header,nav,.noprint{display:none!important}body{padding:0!important}main{padding:0!important;max-width:none!important}.card{border:0!important;padding:12mm 14mm 22mm!important;margin:0!important}.pfoot{display:none!important}#pfg{display:block!important;position:fixed;bottom:7mm;left:0;right:0;text-align:center;font-size:.75rem;color:#222}body.prc #pfg{display:none!important}.tpage{break-after:page;page-break-after:always}.tpage:last-child{break-after:auto;page-break-after:auto}}
 input.locked{background:#e6f1ec;color:#1e7a46;font-weight:700}
 #rc{position:fixed;inset:0;background:#dfe7ea;z-index:70;overflow:auto;padding:calc(10px + env(safe-area-inset-top,0px)) 10px 24px}
 .rc-bar{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;position:sticky;top:0;z-index:2}.rc-bar .btn{margin-top:0}
@@ -95,9 +95,10 @@ input.locked{background:#e6f1ec;color:#1e7a46;font-weight:700}
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 </head>
 <body>
-<header><div><div class="brand">Gandal Solutions · v2026.11.17-b</div><h1 id="hn">Gandal Écoles</h1></div><span><span id="who"></span> <select id="lg" onchange="setLang(this.value)"><option value="fr">Français</option><option value="en">English</option><option value="ar">العربية</option></select></span></header>
+<header><div><div class="brand">Gandal Solutions · v2026.11.25-footer</div><h1 id="hn">Gandal Écoles</h1></div><span><span id="who"></span> <select id="lg" onchange="setLang(this.value)"><option value="fr">Français</option><option value="en">English</option><option value="ar">العربية</option></select></span></header>
 <main id="app"></main>
 <nav id="nav"></nav><div id="sheet-bg" onclick="closeSheet()"></div><div id="sheet"></div><div id="dlg"></div>
+<div id="pfg"></div>
 <div id="rc" class="hidden"><div class="rc-bar"><button class="btn alt" type="button" onclick="closeReceipt()">Fermer</button><button class="btn" type="button" onclick="printReceipt()">Imprimer</button></div><div id="rc-wrap"><div id="rc-sheet"></div></div></div>
 <script>
 const SB_URL='https://uiwjyqokxqjfajuphrul.supabase.co',SB_KEY='sb_publishable_BIAytpdQ5xAe_XimGXLnYw_LnBrfNct',DOM='@ecoles.gandal.app';
@@ -480,7 +481,7 @@ const ySel=()=>`<select onchange="setWY(this.value)">${allYears().map(y=>`<optio
 const tNames=sid=>[...new Set(D.ts.filter(x=>x.subject_id==sid).map(x=>x.teacher_name||(D.staff.find(p=>p.user_id==x.user_id)||{}).full_name||'').filter(Boolean))].join(', ');
 function footText(){const d=new Date(),q=n=>String(n).padStart(2,'0'),tm=`${q(d.getHours())}:${q(d.getMinutes())}:${q(d.getSeconds())}`,dt=d.toLocaleDateString(lang=='ar'?'ar':lang=='en'?'en-GB':'fr-FR',{day:'2-digit',month:'long',year:'numeric'});
  return Z(`Développé par Gandal Solutions | +224 623 36 60 69 | imprimé le ${dt} à ${tm}`,`Developed by Gandal Solutions | +224 623 36 60 69 | printed on ${dt} at ${tm}`,`تطوير Gandal Solutions | +224 623 36 60 69 | طُبع في ${dt} الساعة ${tm}`)}
-window.addEventListener('beforeprint',()=>document.querySelectorAll('.pfoot,.ft-live').forEach(e=>e.textContent=footText()));
+window.addEventListener('beforeprint',()=>{const g=document.getElementById('pfg');if(g)g.textContent=footText();document.querySelectorAll('.pfoot,.ft-live').forEach(e=>e.textContent=footText())});
 const mean=a=>{a=a.filter(z=>z!=null);return a.length?a.reduce((x,y)=>x+y,0)/a.length:null};
 function notesView(){
  if(user.role=='parent'&&D.students[0]){const c0=D.students[0];sel.c=classFor(c0,WY)||c0.class_id;sel.e=c0.id}
@@ -524,7 +525,7 @@ function notesView(){
     return `<tr><td>${esc(x.s.name)}${tn?`<br><span class="tn">${esc(tn)}</span>`:''}</td><td>${x.s.coef}</td><td>${fmt(lo)}</td><td>${fmt(hi)}</td><td><b>${fmt(mine)}</b></td><td>${r_==null?'-':ordn(r_,stu.sex)}</td></tr>`}).join('');
    const gens=showRank?cls.map(c=>metric(c.rows)).filter(v=>v!=null):[],tc=rows.reduce((a,x)=>a+(valOf(x)!=null?+x.s.coef:0),0);
    uniTbl=`<div style="overflow-x:auto"><table class="ut"><tr><th>${t('subj')}</th><th>${Z('Coef','Coef','المعامل')}</th><th>${Z('Min','Min','الأدنى')}</th><th>${Z('Max','Max','الأقصى')}</th><th>${Z('Moyenne','Average','المعدل')}</th><th>${Z('Rang','Rank','الترتيب')}</th></tr>${trs}<tr><th>${Z('Moyenne générale','Overall average','المعدل العام')}</th><th></th><th></th><th></th><th>${fmt(gen)}</th><th></th></tr></table></div>`}
-  r=`<div class="card">${head}<p><b>${esc(nm(Ex,sel.e))}</b>${stu.matricule?' · '+esc(stu.matricule):''}<br>${esc(nm(C,sel.c))}</p>${uni?uniTbl:incTbl}<h3>${t('avg')}: ${fmt(gen)} / ${fmt(mx)}${gen!=null?` — ${gen>=passOf(g)?t('passed'):t('failed')}`:''}</h3>${mention?`<p><b>${esc(mention)}</b></p>`:''}${showRank?`<p>${Z('Effectif de la classe','Students in class','عدد التلاميذ في القسم')} : <b>${mates.length}</b><br>${Z('Rang','Position','الترتيب')} : <b>${rank==null?'-':ordn(rank,stu.sex)}</b></p>`:''}<button class="btn noprint" onclick="window.print()">${t('print')}</button>${uni?`<div class="pfoot">${footText()}</div>`:''}</div>`}
+  r=`<div class="card">${head}<p><b>${esc(nm(Ex,sel.e))}</b>${stu.matricule?' · '+esc(stu.matricule):''}<br>${esc(nm(C,sel.c))}</p>${uni?uniTbl:incTbl}<h3>${t('avg')}: ${fmt(gen)} / ${fmt(mx)}${gen!=null?` — ${gen>=passOf(g)?t('passed'):t('failed')}`:''}</h3>${mention?`<p><b>${esc(mention)}</b></p>`:''}${showRank?`<p>${Z('Effectif de la classe','Students in class','عدد التلاميذ في القسم')} : <b>${mates.length}</b><br>${Z('Rang','Position','الترتيب')} : <b>${rank==null?'-':ordn(rank,stu.sex)}</b></p>`:''}<button class="btn noprint" onclick="window.print()">${t('print')}</button><div class="pfoot">${footText()}</div></div>`}
  return (user.role=='parent'?`<div class="card noprint"><div class="row">${ySel()}${rpSel}${rmSel}</div></div>`:`<div class="card noprint"><div class="row">${ySel()}<select onchange="sel.e=null;pick('c',this.value)">${opts(C,sel.c)}</select><select onchange="pick('e',this.value)">${opts(Em,sel.e)}</select>${rpSel}${rmSel}</div>${noG}${sel.c&&g&&!E.length?emptyHint():''}</div>`)+r}
 
 /* ---- Notes non calculées (raw scores sheet, A4) ---- */
@@ -736,7 +737,7 @@ window.addEventListener('resize',()=>{if(!$('rc').classList.contains('hidden'))s
 function view(){
  if(user.admin)return schoolsView();
  return ({home:homeView,levels:levelsView,classes:classesView,subjects:subjectsView,students:studentsView,users:staffView,personnels:personnelView,settings:settingsView,grades:notesView,report:notesView,nc:ncView,tr:trView,fset:feesView,payf:payView,pays:soonView,rem:soonView}[tab]||(()=>`<div class="card">${t('soon')}</div>`))()}
-function render(){
+function render(){const pg=$('pfg');if(pg)pg.textContent=footText();
  document.documentElement.lang=lang;document.documentElement.dir=lang=='ar'?'rtl':'ltr';$('lg').value=lang;
  $('hn').textContent=(user&&user.name)||'Gandal Écoles';
  $('who').innerHTML=user?`<button class="x" style="color:#fff" onclick="logout()">${t('out')}</button>`:'';
