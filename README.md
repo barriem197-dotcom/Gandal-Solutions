@@ -1,1 +1,1 @@
-Gandal Écoles
+Gandal École
